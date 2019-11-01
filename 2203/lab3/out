@@ -1,7 +1,0 @@
-BD Software STL Message Decryptor v3.10 for gcc 2/3/4
-/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /usr/
-    lib64/gcc/x86_64-suse-linux/8/../../../../lib64/crt1.o: in function `_star
-    t':
-/home/abuild/rpmbuild/BUILD/glibc-2.27/csu/../sysdeps/x86_64/start.S:104:
-    undefined reference to `main'
-collect2: error: ld returned 1 exit status
