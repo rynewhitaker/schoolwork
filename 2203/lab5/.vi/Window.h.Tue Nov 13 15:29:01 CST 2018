@@ -1,0 +1,50 @@
+#ifndef WINDOW_H
+#define WINDOW_H
+// Window.h file -- 
+#include <ncurses.h>
+#include <sstream>
+#include <string>
+
+int numRows() { int r,c; getmaxyx(stdscr,r,c); return r; }
+int numCols() { int r,c; getmaxyx(stdscr,r,c); return c; }
+class Window {
+protected:
+   string contents;
+   WINDOW *window ;
+public:
+   Window (int rows, int cols, int r, int c, string initialContents) {
+      window = newwin(rows, cols, r, c);
+      contents = initialContents;
+      waddstr(window,contents.c_str() );
+      wrefresh(window);
+   }
+   void write ( string s) {
+      contents += s;
+      wmove(window, 0, 0);
+      wclrtoeol(window);
+      waddstr(window,contents.c_str());
+      wrefresh(window);
+   }
+   void write (double d) {
+      stringstream ss;
+      ss << d;
+      string s = ss.str();
+      write (s);   // call the string version
+   }  
+
+   void write (string s, int n) {
+      write(s);
+      write(":");
+      write(n);
+   }
+   void clear() {
+      contents = "";
+      write("");
+   }
+   void pause() {
+      wgetch(window);
+   }
+
+};
+
+#endif

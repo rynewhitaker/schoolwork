@@ -1,0 +1,5 @@
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+lab1.cc: In function ‘void displayGrid(char (*)[4], WINDOW * (*)[4])’:
+lab1.cc:44:3: error: expected ‘}’ before ‘else’
+else if (n == 4)
+^

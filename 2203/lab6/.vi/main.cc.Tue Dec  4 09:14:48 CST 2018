@@ -1,0 +1,64 @@
+/*
+   lab5.cc -- Build a window manager
+
+   Author: Larry Morell and Ryne Whitaker
+
+   Modification History
+   7/13/2018  -- Original version
+*/
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <ctype.h> 
+#include <cstring> 
+#include <ncurses.h> 
+#include <time.h>
+#include <stdlib.h>
+#include "BorderedWindow.h"
+#include "DebugWindow.h"
+#include "CommandWindow.h"
+using namespace std;
+
+int main (int argc, char *argv[]) {
+   initscr();
+   cbreak();      /* Input line buffering disabled; pass on every char*/
+
+   srand(time(NULL)); // initialize the random seed for computer selection
+   const string plays[3] {"rock", "paper", "scissors"};
+
+   CommandWindow c1;
+   c1.refresh();
+   string player = c1.readString();
+   while (!(player == "q" or player == "Q")
+   {
+   int randPlay = rand() % 3; // random play selection for computer
+   string computer = plays[randPlay];
+   if (player == "r" && computer == "rock")
+   {}
+   else if (player == "r" && computer == "paper")
+   {}
+   else if (player == "r" && computer == "scissors")
+   {}
+   else if (player == "p" && computer == "rock")
+   {}
+   else if (player == "p" && computer == "paper")
+   {}
+   else if (player == "p" && computer == "scissors")
+   {}
+   else if (player == "s" && computer == "rock")
+   {}
+   else if (player == "s" && computer == "paper")
+   {}
+   else if (player == "s" && computer == "scissors")
+   {]
+   else
+   {}
+   
+   CommandWindow.clear();
+   CommandWindow.readString();   
+   }
+
+   endwin();         /* End curses mode        */
+   return 0;
+}
+

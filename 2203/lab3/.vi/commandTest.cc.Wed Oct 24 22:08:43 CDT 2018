@@ -1,0 +1,67 @@
+/* 
+   commandTest.cc  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   10/24/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <ncurses.h>
+#include "commandWindow.h"
+
+int main () {
+   initscr();
+   cbreak();
+
+   CommandWindow commandWindow = CommandWindow();
+   commandWindow.clear();
+   /*  
+   commandWindow.write("doggy");
+   commandWindow.pause();
+   commandWindow.clear();
+
+   commandWindow.write('z');
+   commandWindow.pause();
+   commandWindow.clear();
+
+   commandWindow.write(25);
+   commandWindow.pause();
+   commandWindow.clear();
+*/
+   string command = commandWindow.readString();
+   while ( ! (command == "q" or command == "Q" )) {
+      //debugWindow.write (command);
+      commandWindow.write(command);
+      commandWindow.clear();
+      command = commandWindow.readString();
+      //debugWindow.clear();
+   }
+   
+   //string s = commandWindow.readString();
+   //commandWindow.write(s);
+   //commandWindow.pause();
+   //commandWindow.clear();
+
+   int n = commandWindow.readInt();
+   commandWindow.write(n);
+   commandWindow.pause();
+   commandWindow.clear();
+
+
+/*   
+   char ch = commandWindow.readChar();
+   commandWindow.write(ch);
+   commandWindow.pause();
+   commandWindow.clear();
+*/
+   endwin();
+   return 0;
+}
+

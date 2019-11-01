@@ -1,0 +1,26 @@
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccZF9Zar.o: in function `numRows()':
+debugTest.cc:(.text+0x0): multiple definition of `numRows()'; /tmp/ccQyi8Yk.o:
+    commandTest.cc:(.text+0x0): first defined here
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccZF9Zar.o: in function `numCols()':
+debugTest.cc:(.text+0x2d): multiple definition of `numCols()'; /tmp/ccQyi8Yk.o
+    :commandTest.cc:(.text+0x2d): first defined here
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccZF9Zar.o: in function `main':
+debugTest.cc:(.text+0x5a): multiple definition of `main'; /tmp/ccQyi8Yk.o:comm
+    andTest.cc:(.text+0x5a): first defined here
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccItONAy.o: in function `numRows()':
+lab3.cc:(.text+0x0): multiple definition of `numRows()'; /tmp/ccQyi8Yk.o:comma
+    ndTest.cc:(.text+0x0): first defined here
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccItONAy.o: in function `numCols()':
+lab3.cc:(.text+0x2d): multiple definition of `numCols()'; /tmp/ccQyi8Yk.o:comm
+    andTest.cc:(.text+0x2d): first defined here
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccItONAy.o: in function `main':
+lab3.cc:(.text+0x5a): multiple definition of `main'; /tmp/ccQyi8Yk.o:commandTe
+    st.cc:(.text+0x5a): first defined here
+collect2: error: ld returned 1 exit status

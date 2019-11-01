@@ -1,0 +1,48 @@
+/* 
+   debugTest.cc  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   10/23/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <ncurses.h>
+#include "debugWindow.h"
+
+
+
+int main () {
+   initscr();
+   cbreak();
+   DebugWindow debugWindow = DebugWindow();
+   
+   debugWindow.on();
+
+   debugWindow.write("test");
+   debugWindow.pause();
+   debugWindow.clear();
+
+   debugWindow.write("25");
+   debugWindow.pause();
+   debugWindow.clear();
+
+
+   debugWindow.write("z");
+   debugWindow.pause();
+   debugWindow.clear();
+/*
+   debugWindow.write("dog", 25);
+   debugWindow.pause();
+   debugWindow.clear();
+*/
+   endwin();
+   return 0;
+}
+

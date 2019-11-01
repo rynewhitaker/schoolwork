@@ -1,0 +1,220 @@
+#include <ncurses.h>
+#include <ctype.h>
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+string itos(int n) {
+   stringstream ss;
+   ss << n;
+   return ss.str();
+}
+
+const int SIZE = 4;   // The puzzle grid is SIZE x SIZE
+
+// initModel -- initialize the underlying model of puzzle
+void initModel(char mgrid[SIZE][SIZE]) {
+   char ch = 'a'-1;
+   for (int r = 0; r < SIZE; r++) {
+      for (int c = 0; c < SIZE; c++) {
+         mgrid[r][c] = ch; // Add it to the model 
+         ch++;
+      }
+   }
+}
+
+// displayGrid  -- display mgrid as grid
+void displayGrid(char mgrid[SIZE][SIZE], WINDOW *grid[SIZE][SIZE]) {
+   // Display the grid
+   int n = 1; // window number
+   for (int r=0; r < SIZE; r++) {
+      for (int c=0; c < SIZE; c++) {
+         grid[r][c] = newwin(5,5,4*r,4*c);
+         WINDOW *w = grid[r][c];
+
+         // Set the default border
+         wborder(grid[r][c], ACS_VLINE, ACS_VLINE, ACS_HLINE, ACS_HLINE, ACS_PLUS, ACS_PLUS, ACS_PLUS, ACS_PLUS);
+         //  Modify the window corners, depending on the window num
+         if (n == 1)  
+            mvwaddch(w, 0,0, ACS_ULCORNER);   
+         else if (n == 2) 
+            mvwaddch(w, 0,0, ACS_TTEE);   
+         else if (n == 3)  {
+            mvwaddch(w, 0,0, ACS_TTEE);
+	 else if (n == 4)
+	 {   
+            mvwaddch(w, 0,4, ACS_URCORNER);
+	    mvwaddch(w, 0,0, ACS_TTEE);
+	 }   
+         if (n == 5)
+            mvwaddch(w, 0,0, ACS_LTEE);   
+         if (n == 8)
+            mvwaddch(w, 0,4, ACS_RTEE);
+	 if (n == 9)
+	    mvwaddch(w, 0,0, ACS_LTEE);
+	 if (n == 12)
+	    mvwaddch(w, 0,4, ACS_RTEE);
+         if (n == 13)
+	 {
+            mvwaddch(w, 0,0, ACS_LTEE);   
+            mvwaddch(w, 4,0, ACS_LLCORNER);
+	 }   
+         if (n == 14)
+            mvwaddch(w, 4,0, ACS_BTEE);   
+	 if (n == 15)
+	    mvwaddch(w, 4,0, ACS_BTEE);
+         else if (n == 16) {
+            mvwaddch(w, 0,4, ACS_RTEE);   
+            mvwaddch(w, 4,0, ACS_BTEE);   
+            mvwaddch(w, 4,4, ACS_LRCORNER);   
+         }
+         // skip window 1, display the rest
+         if (n != 1) mvwaddch(w, 2,2, mgrid[r][c]);   
+         wrefresh(grid[r][c]);
+         n++; 
+      }
+   }
+   mgrid[0][0] = ' ';  // Put in the space where the '0' is
+}
+
+// solvePuzzle -- let the user try to solve the puzzle
+string solvePuzzle(char mgrid[SIZE][SIZE], WINDOW* grid[SIZE][SIZE]) {
+   bool done = false;
+   string typed  = "";
+   char ch;
+   while(!done && (ch = getch()) != 'Q')     
+   {
+      typed = typed + (char)ch;     // Append the char ch to record the movements
+      if (ch == '0') continue;
+      // ch can be moved iff it is next to a space, i.e. where the 0 is located
+      // Search for the location (r,c) of ch
+      int r=0;
+      int c=0;
+      int x = 0;
+      mvprintw(26,0,""); 
+      for (r=0; r < SIZE; r++) {
+         for (c=0; c < SIZE; c++) {
+            if (mgrid[r][c] == ch) goto found;  // Whoa, this is extremely rare!
+         }
+         if ( c != SIZE) break;
+      }
+      // ch is located at (r,c)
+      found: 
+      // See if there is a space next to mgrid[r][c]
+      int found = false;
+      int zeroRow = -1;
+      int zeroCol = -1;
+
+      // There are 4 locations to search for a space (' ')
+ 
+      // Up:
+      if (r > 0 && mgrid[r-1][c] == ' ') {
+         zeroRow = r-1;
+         zeroCol = c;
+      }
+      // or Down:
+      else if (r < SIZE-1  && mgrid[r+1][c] == ' ') {
+         zeroRow = r+1;
+         zeroCol = c;
+      }
+      // or Left:
+      else if (c > 0 && mgrid[r][c-1] == ' ') {
+         zeroRow = r;
+         zeroCol = c-1;
+      }
+      // or Right:
+      else if (c < SIZE-1 && mgrid[r][c+1] == ' ') {
+         zeroRow = r;
+         zeroCol = c+1;
+      }
+
+      // if zeroRow is still  negative, no bordering space was found
+      // so inform the user that the tile cannot be moved
+      if (zeroRow < 0) {
+         mvprintw(LINES-1,0,"The character you typed is not next to an empty square");
+         clrtoeol();  // Clear to end of line
+         refresh();
+         system("sleep 1");  // Pause, approximately, for 1 second
+      }
+      else { // Legal move, copy the model's char to the grid
+         mvwaddch(grid[zeroRow][zeroCol], 2,2, mgrid[r][c]);
+         swap(mgrid[zeroRow][zeroCol], mgrid[r][c]);
+         mvwaddch(grid[r][c], 2,2,' ');
+         wrefresh(grid[r][c]);
+         wrefresh(grid[zeroRow][zeroCol]);
+      }
+      mvprintw(LINES-1,0,"Type the character on tile to move it (or 'q' to quit):");
+      clrtoeol();
+      mvprintw(LINES-1,57,typed.c_str());  // extract the c-string from typed
+      move(LINES-1,51+typed.size());       // display it again
+      refresh();  // The background
+/*
+      for (int r=0; r < SIZE; r++) 
+         for (int c=0; c < SIZE; c++) 
+            wrefresh(grid[r][c]);
+      refresh();
+*/
+
+      // Check to see if the tiles are reversed 
+      if (mgrid[0][0] == 'o'
+         and mgrid[0][1] == 'n'
+         and mgrid[0][2] == 'm'
+	 and mgrid[0][3] == 'l'
+         and mgrid[1][0] == 'k'
+         and mgrid[1][1] == 'j'
+         and mgrid[1][2] == 'i'
+	 and mgrid[1][3] == 'h'
+         and mgrid[2][0] == 'g'
+         and mgrid[2][1] == 'f'
+         and mgrid[2][2] == 'e'
+	 and mgrid[2][3] == 'd'
+	 and mgrid[3][0] == 'c'
+	 and mgrid[3][1] == 'b'
+	 and mgrid[3][2] == 'a'
+	 and mgrid[3][3] == ' '
+         ) 
+         done = true;
+
+   }
+   if (done) return typed;
+   else return "";
+ }
+
+int main()
+{
+   initscr();            /* Start curses mode       */
+   cbreak();             /* Line buffering disabled */
+   keypad(stdscr, TRUE); /* We get F1, F2 etc.. not needed for this program */
+   //noecho();           /* Don't echo() while we do getch */
+
+
+   mvprintw(18,0,"The goal is to reverse the puzzle by moving the tiles in the grid to achieve:\n");
+   mvprintw(20,0,"    onml\n    kjih\n    gfed\n    cba");
+   mvprintw(LINES-1,0,"Type the letter on the tile to move it (or 'Q' to quit):");
+   refresh();
+
+   char mgrid[SIZE][SIZE];  // model grid
+   initModel(mgrid);
+
+   WINDOW *grid[SIZE][SIZE];  // window (gui) grid
+   displayGrid(mgrid, grid);
+
+   string solution =  solvePuzzle(mgrid, grid);
+   
+   move(LINES-1,0); clrtoeol();
+   if (solution != "")  {
+      move(LINES-1,0); 
+      clrtoeol();
+      mvprintw(LINES-2,0,"Congratulations. You solved the puzzle!\n");
+      mvprintw(LINES-1,0,"Your sequence was ");
+      printw(solution.c_str());
+      system("sleep 1");
+      refresh();
+   }
+   else
+      mvprintw(LINES-1,0,"Sorry. Better luck next time!");
+
+   getch();
+   endwin();         /* End curses mode        */
+   return 0;
+}

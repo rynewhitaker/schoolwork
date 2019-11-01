@@ -1,0 +1,30 @@
+A+B;
+A
+        +   C
+;
+A*(B+C);
+A+B+C;
+(
+            A
+    +                   B
+
+
+*
+
+(
+
+C/
+
+D)/(E
+
++F          +(G+                H-
+
+I)*J
+
+)
+
+)
+
+/               K;
+
+A+(B+C).garbage shouldn't be processed.

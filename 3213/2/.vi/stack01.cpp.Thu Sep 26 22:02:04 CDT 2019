@@ -1,0 +1,36 @@
+#include<iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+void printList(stack<int>& stack) {
+  for (int i = 0; i < stack.size(); i++) {
+    cout << stack.top() << " ";
+	stack.pop();
+  }
+  cout << endl;
+}
+
+void reverseOrder(stack<int>& stack) {
+	while (stack.top != NULL) {
+		reversed.push(stack.top());
+		stack.pop();
+	}
+}
+
+int main() { 
+  stack<int> S, R;
+  
+  for(int i=0;i<20;i++) {
+    S.push(rand() % 30);
+  }
+  
+  printList(S);
+  
+  reverseOrder(S);
+  
+  printList(R);
+
+return 0;
+}

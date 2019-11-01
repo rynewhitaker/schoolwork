@@ -1,0 +1,33 @@
+/* 
+   commandTest.cc  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   10/24/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <ncurses.h>
+#include "commandWindow.h"
+
+int main () {
+   initscr();
+   cbreak();
+
+   CommandWindow commandWindow = CommandWindow();
+   
+   cout << "got here 1" << endl; 
+   commandWindow.write("doggy");
+   commandWindow.pause();
+   commandWindow.clear();
+
+   endwin();
+   return 0;
+}
+

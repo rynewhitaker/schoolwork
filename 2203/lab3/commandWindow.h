@@ -1,0 +1,105 @@
+/* 
+   commandWindow.h  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   10/17/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#ifndef COMMAND_WINDOW
+#define COMMAND_WINDOW
+#include <ncurses.h>
+#include <sstream>
+#include <string>
+using namespace std;
+class CommandWindow {
+private:
+   WINDOW *command;
+   string contents;
+   int r, c;
+   char line[100];
+public:
+   // Create a CommandWindow, positioned at the next-to-bottom line
+   // of the screen, and the full width of the screen.
+   CommandWindow() {
+   getmaxyx(stdscr, r, c);
+   // create new window two lines from bottom on left hand side, with height of one and width of c
+   command = newwin(1, c, r-2, 0);
+   }
+
+   // Append string s onto the command window string and then display it
+   void write (string s) {
+      wmove(stdscr, 0, 0);
+      wclrtoeol(stdscr);
+      string message = "Now printing \"" + s + "\" to the debug window.";
+      waddstr(stdscr, message.c_str());
+      wrefresh(stdscr); 
+   }
+
+   // Append character ch onto the command window string and then display it
+   void write (char ch) {
+      wmove(stdscr, 0, 0);
+      string chString = to_string(ch);
+      string message = "Now printing \"" + chString + "\" to the debug window.";
+      waddch(stdscr, ch);
+      wrefresh(stdscr);
+   }
+
+   // Append integer n onto the command window string and then display it
+   void write (int n) {
+      wmove(stdscr, 0, 0);
+      wclrtoeol(stdscr);
+      string nStr = to_string(n);
+      string message = "Now printing \"" + nStr + "\" to the debug window.";
+      waddstr(stdscr, message.c_str());
+      wrefresh(stdscr);
+   }	   
+   
+   void write (double dub) {
+      wmove(stdscr, 0, 0);
+      wclrtoeol(stdscr);
+      string dubStr = to_string(dub);
+      string message = "Now printing \"" + dubStr + "\" to the debug window.";
+      waddstr(stdscr, message.c_str());
+      wrefresh(stdscr);
+   }	   
+
+   // Clear the command window and redisplay any prompt
+   void clear() {
+      werase(command);
+      wmove(command, r-2, 0);
+      waddstr(command, "Command: ");
+      wrefresh(command);
+   }
+  
+   // Pause in the command window
+   void pause() {
+      wgetch(command);
+   }
+
+   // Read an integer from the command window
+   int readInt() {
+      wgetnstr(command, line, 99);
+      int value = atof(line);  // alphabetic to float (double)
+   return value;
+   }
+  
+   // Read a double from the command window
+   double readDouble() {
+      wgetnstr(command, line, 99);
+      double value = atof(line);  // alphabetic to float (double)
+   return value;
+   }
+  
+   // Read a string from the command window
+   string readString() {
+      wgetnstr(command, line, 99);  // N-1 because you must leave one space for NULL
+   return line; 
+   }
+};
+#endif
+

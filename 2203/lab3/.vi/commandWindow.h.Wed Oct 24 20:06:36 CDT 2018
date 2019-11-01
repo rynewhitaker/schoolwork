@@ -1,0 +1,104 @@
+/* 
+   commandWindow.h  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   10/17/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#ifndef COMMAND_WINDOW
+#define COMMAND_WINDOW
+#include <ncurses.h>
+#include <sstream>
+#include <string>
+using namespace std;
+class CommandWindow {
+private:
+   WINDOW *command;
+   string contents;
+   int r, c;
+   char line[100];
+public:
+   // Create a CommandWindow, positioned at the next-to-bottom line
+   // of the screen, and the full width of the screen.
+   CommandWindow() {
+   getmaxyx(stdscr, r, c);
+   // create new window two lines from bottom on left hand side, with height of one and width of c
+   command = newwin(1, c, r-2, 0);
+   }
+/*  
+   // Append string s onto the command window string and then display it
+   void write (string s) {
+      //wmove(command, r-2, 0);
+      waddstr(command, "Command: ");
+      //wmove(command, r-2, 10);
+      contents = s.c_str();
+      waddstr(command, contents.c_str());
+      //waddstr(command, s.c_str());
+      contents = "Command: ";
+      wrefresh(command); 
+   }
+*/
+
+   void write (string s) {
+      wmove(stdscr, 0, 0);
+      waddstr(stdscr, s.c_str());
+      wrefresh(stdscr); 
+   }
+
+   // Append character ch onto the command window string and then display it
+   void write (char ch) {
+      wmove(command, r-2, 0);
+      waddstr(command, "Command: ");
+      //waddstr(command, contents.c_str());
+      waddch(command, ch); 
+      wrefresh(command); 
+   }  
+  
+   // Append integer n onto the command window string and then display it
+   void write (int n) {
+      wmove(command, r-2, 10);
+      waddstr(command, "Command: ");
+      string nStr = to_string(n);
+      contents = nStr;
+      waddstr(command, contents.c_str());
+      //waddstr(command, nStr.c_str());
+      //contents = "Command: ";
+      wrefresh(command); 
+   }  
+  
+   // Clear the command window and redisplay any prompt
+   void clear() {
+      wmove(command, r-2, 10);
+      wclrtoeol(command);
+   }
+  
+   // Pause in the command window
+   void pause() {
+      wgetch(command);
+   }
+
+   // Read an integer from the command window
+   int readInt() {
+      int value = atof(line);  // alphabetic to float (double)
+   return value;
+   }
+  
+   // Read a double from the command window
+   double readDouble() {
+      double value = atof(line);  // alphabetic to float (double)
+   return value;
+   }
+  
+   // Read a string from the command window
+   string readString() {
+      wgetnstr(command,line, 99);  // N-1 because you must leave one space for NULL
+   return line; 
+   }
+};
+#endif
+

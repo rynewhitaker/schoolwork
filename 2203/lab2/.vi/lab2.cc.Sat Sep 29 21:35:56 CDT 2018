@@ -1,0 +1,99 @@
+#include <string>
+#include <vector>
+
+// WindowBuffer -- implements a multi-line buffer that can be written and read
+struct WindowBuffer {
+
+   /* Data structure for holding lines for a window */
+   vector <string> buffer;
+   int r, c;  // current write point
+
+   /* Operations for manipulating a WindowBuffer */
+
+   // WindowBuffer -- create an WindowBuffer with one empty line
+   WindowBuffer () {
+      buffer = vector<string>(); // create the buffer, with no strings
+      moveTo(0,0);  
+   }
+
+   // WindowBuffer -- create an WindowBuffer with rows lines, each with cols spaces
+   WindowBuffer (int rows, int cols) {
+      buffer = vector<string>(rows);
+      for(int r = 0; r < rows; r++)
+	 buffer[r] = string(cols, ' ');
+      // r = 0; c = 0;
+   }
+
+   // moveTo  -- Expands buffer to allow writing at (row,col)
+   void moveTo(int row, int col) {
+     // Set reasonable boundaries
+      if (row <0) row = 0;
+      if (col <0) col = 0;
+      else if (row > 1000 or col > 100)  {
+         // Let's be reasonable; this is only an example after all!
+         row = 1000; col = 100;
+      }
+      r = row; c = col;
+      // Ensure there is a place to move to
+      while(r >=buffer.size())
+         buffer.push_back("");
+      while (c > buffer[r].size())
+         buffer[r] += " ";
+      // Upon exit r will reference an existing row,
+      // c will reference a existing col or will be right after the end
+
+   }
+
+   // insertRow -- inserts str before the current row
+   void insertRow (string str) {
+   }
+
+   // insert -- inserts str at current (r,c) location
+   void insert (string str) {
+   } 
+
+   // write -- overwrites str at current  (r,c) location
+   void write (string str) {
+      buffer[r].replace(c,str.size(),str);
+      c = c + str.size();
+   } 
+
+   // clear -- remove all lines from the buffer
+   void clear() {
+   }
+
+   // clearToEoln -- remove all chars from pos (r,c) to end of line
+   void clearToEoln() {
+   }
+
+   // delRow -- delete current row; r then reference next row
+   void delRow() {
+   }
+
+   // delToEoln -- delete from current column to the end of line
+   void delToEoln() {
+   }
+
+   // getRow -- get row r
+   string getRow() {
+   
+   // numberOfRows -- return the number of rows in the buffer
+   }
+   int numberOfRows() {  
+   }
+
+   // numberOfCols -- return the length of the current line
+   int numberOfCols() {  
+   }
+
+   // rowNumber -- return the row number of the current write position
+   int rowNumber() {  
+	return r;
+   } 
+
+   // colNumber -- return the col number of the current write position
+   int colNumber() {  
+   	return c;
+   }
+};
+ 

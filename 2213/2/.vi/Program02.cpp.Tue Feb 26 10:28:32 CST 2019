@@ -1,0 +1,60 @@
+#include "ListType.h"
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int main() {
+   OListType<int> olist;
+
+   for (int i = 1; i <= 11; i = i + 10) {
+      if (olist.insert(i)) {
+         cout << "insert of " << i << " succeeded" << endl;
+      }
+      else {
+         cout << "insert of " << i << " failed" << endl;
+      }
+   }
+   cout << olist << endl;
+   olist.insert(115);
+   cout << olist << endl;
+
+
+   for (size_t items = 1; items <= 11; ++items) {
+      if (olist.find(items)) {
+         cout << items << " is in the ordered list." << endl;
+      }
+      else {
+         cout << items << " is not in the ordered list." << endl;
+      }
+   }
+
+   cout << olist << endl;
+
+   if (olist.find(0)) {
+      cout << "0 is in the ordered list." << endl;
+   }
+   
+   return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

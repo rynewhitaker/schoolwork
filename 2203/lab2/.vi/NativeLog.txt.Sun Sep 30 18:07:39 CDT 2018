@@ -1,0 +1,37 @@
+---------------------------------------------------------------------
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+---------------------------------------------------------------------
+Command line: ''
+banner = Y
+break_algorithm = D
+comma_wrap = B
+close_wrap = Y
+output_width = 80
+tabsize = 4
+advise_re_policy_opts = 1
+reformat_linenumbers = 0
+wrap_own_msgs = 0
+header_policy = L
+with_policy = S
+headers_to_show = 1
+candidate_policy = L
+pathname_policy = S
+show_backtraces = Y
+---------------------------------------------------------------------
+Native input follows:
+---------------------------------------------------------------------
+
+Raw unprocessed input line:
+    for (i = buffer.size(); i > r; i--)
+
+
+
+The line at the point of the error was:
+for (i = buffer.size(); i> r; i--)
+
+                         ^
+
+Nesting key: 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
+STL Decryptor ERROR: the char '>' (position 25) DOESN'T MATCH DELIMITER '('!
+         ^

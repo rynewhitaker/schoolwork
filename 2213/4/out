@@ -1,0 +1,13 @@
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld: /tmp/
+    ccCSeEqF.o: in function `main':
+in2post.cpp:(.text+0x21): undefined reference to 'expression()'
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld:
+    in2post.cpp:(.text+0x102): undefined reference to 
+   `operator
+    >
+>(istream &, expression &)'
+/usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/bin/ld:
+    in2post.cpp:(.text+0x16b): undefined reference to 
+   `operator<<(ostream &, expression const &)'
+collect2: error: ld returned 1 exit status

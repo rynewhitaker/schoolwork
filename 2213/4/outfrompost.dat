@@ -1,0 +1,12 @@
+Infix:    A+B;
+Postfix:  AB+
+Infix:    A+C;
+Postfix:  AC+
+Infix:    A*(B+C);
+Postfix:  ABC+*
+Infix:    A+B+C;
+Postfix:  AB+C+
+Infix:    (A+B*(C/D)/(E+F+(G+H-I)*J))/K;
+Postfix:  ABCD/*EF+GH+I-J*+/+K/
+Infix:    A+(B+C).
+Postfix:  ABC++

@@ -1,0 +1,102 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Your Name
+//  Program #?
+//  Due: mm/dd/yyyy
+//
+//  Description:
+//  This should be a description of what the overall program should be doing.
+//  Try to keep line lengths to 80 characters at most - keeps it easier to
+//  read and is much more printer friendly.
+//
+//  Input:
+//  Brief description from where the major input is obtained and, possibly,
+//  the format of the input.
+//
+//  Output:
+//  Brief description of what output the program is expected to produce and,
+//  possibly, the format of the output.
+//
+//  Assumptions:
+//  This is only needed if there was something ambiguous in the program
+//  specifications and you were unable to resolve the issue.  State what the
+//  issue was and what you assumed was meant - and why.
+//
+//  Special Processing Requirements:
+//  Shouldn't need this section for Programming II.  This would be the place
+//  to include any special compiling instructions - which would imply a much
+//  more complicated program than will be required for this class.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+#ifndef ULISTTYPE_H
+#define ULISTTYPE_H
+#include "ListType.h"
+#include<iostream>
+
+template <class T>
+class UListType: public ListType<T> {
+   public:
+      UListType(size_t = 10);
+      virtual bool insert (const T&);
+      virtual bool erase (const T&);
+      virtual bool find (const T&) const;
+};
+
+template <class T>
+bool UListType<T>::insert(const T& item) {
+   bool result = false;
+   bool goodtogo = true;
+
+   if (this -> full()) {
+      try {
+         T *temp = new T[2 * this -> capacity];
+	 this -> capacity = 2 * this -> capacity;
+	 for (size_t i = 0; i < this -> count; ++i) {
+            temp[i] = this -> list[i];
+	 }
+	 delete [] this -> list;
+	 this -> list = temp;
+      }
+      catch (std::bad_alloc) {
+         goodtogo = false;
+      }
+   }
+   if (goodtogo) {
+      this -> list[this -> count++] = item;
+      result = true;
+   }
+   return result;
+}
+
+template <class T>
+UListType<T>::UListType(size_t n): ListType<T>(n) {
+}
+
+template <class T>
+bool UListType<T>::erase(const T& item) {
+   bool result = false;
+
+   if (!this -> empty()) {
+      size_t i = 0;
+      while (i < this -> count && item != this -> list[i]) {
+         ++i;
+      }
+      if (i < this -> count) {
+         this -> list[i] = this -> list[--this -> count];
+	 result = true;
+      }
+   }
+   return result;
+}
+
+template <class T>
+bool UListType<T>::find(const T& item) const {
+   size_t i = 0;
+   while (i < this -> count && item != this -> list[i]) {
+      ++i;
+   }
+   return (i < this -> count);
+}
+
+#endif

@@ -1,0 +1,16 @@
+#include<iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+int main() { 
+  stack<int> S;
+  
+  for(i=0;i<20;i++) {
+    S.push(rand() & 20);
+  }
+  
+
+return 0;
+}

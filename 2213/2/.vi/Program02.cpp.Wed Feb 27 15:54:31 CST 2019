@@ -1,0 +1,127 @@
+#include "UListType.h"
+#include "OListType.h"
+#include<iostream>
+
+using namespace std;
+
+int main() {
+   OListType<int> olist;
+   UListType<int> ulist;
+
+   cout << "Ordered List: " << endl;
+
+   for (int i = 11; i >= 1; i = i - 10) {
+      if (olist.insert(i)) {
+         cout << "Insert of " << i << " in ordered list succeeded" << endl;
+      } else {
+         cout << "Insert of " << i << " in ordered list failed" << endl;
+      }
+   }
+   cout << olist << endl;
+   olist.insert(115);
+   cout << olist << endl;
+
+   cout << "Currently, the size of the ordered list is " << olist.size() << "." << endl;
+   
+   for (size_t items = 1; items <= 11; ++items) {
+      if (olist.find(items)) {
+         cout << items << " is in the ordered list." << endl;
+      } else {
+         cout << items << " is not in the ordered list." << endl;
+      }
+   }
+
+   cout << olist << endl;
+
+   if (olist.find(0)) {
+      cout << "0 is in the ordered list." << endl;
+   }
+
+   if(olist.erase(11)) {
+      cout << "Erase of 11 from the ordered list succeeded." << endl;
+      cout << olist << endl;
+   } else {
+      cout << "Erase of 11 from the ordered list failed." << endl;
+   }
+
+   olist.eraseAll();
+
+   if(olist.size() == 0) {
+      cout << "Erase of the entire ordered list succeeded." << endl;
+      cout << "olist elements: " << olist << endl;
+      cout << "olist size: " << olist.size() << endl;
+   } else {
+      cout << "Erase of the entire ordered list failed." << endl;
+   }
+
+   cout << endl << "Unordered List: " << endl;
+
+   for (int i = 1; i <= 11; i = i + 10) {
+      if (ulist.insert(i)) {
+         cout << "Insert of " << i << " in unordered list succeeded" << endl;
+      } else {
+         cout << "Insert of " << i << " in unordered failed" << endl;
+      }
+   }
+
+   cout << ulist << endl;
+   ulist.insert(115);
+   cout << ulist << endl;
+   
+   cout << "Currently, the size of the unordered list is " << ulist.size() << "." << endl;
+   
+   for (size_t items = 1; items <= 11; ++items) {
+      if (ulist.find(items)) {
+         cout << items << " is in the unordered list." << endl;
+      } else {
+         cout << items << " is not in the unordered list." << endl;
+      }
+   }
+
+   cout << ulist << endl;
+  
+   if (ulist.find(0)) {
+      cout << "0 is in the unordered list." << endl;
+   }
+
+   if(ulist.erase(11)) {
+      cout << "Erase of 11 from the unordered list succeeded." << endl;
+      cout << ulist << endl;
+   } else {
+      cout << "Erase of 11 from the unordered list failed." << endl;
+   }
+
+   ulist.eraseAll();
+
+   if(ulist.size() == 0) {
+      cout << "Erase of the entire unordered list succeeded." << endl;
+      cout << "ulist elements: " << ulist << endl;
+      cout << "ulist size: " << ulist.size() << endl;
+   } else {
+      cout << "Erase of the entire unordered list failed." << endl;
+   }
+
+
+   return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

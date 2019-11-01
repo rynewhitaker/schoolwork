@@ -1,0 +1,119 @@
+#include <string>
+#include <vector>
+
+// WindowBuffer -- implements a multi-line buffer that can be written and read
+struct WindowBuffer {
+
+   /* Data structure for holding lines for a window */
+   vector <string> buffer;
+   int r, c;  // current write point
+
+   /* Operations for manipulating a WindowBuffer */
+
+   // WindowBuffer -- create an WindowBuffer with one empty line
+   WindowBuffer () {
+      buffer = vector<string>(); // create the buffer, with no strings
+      moveTo(0,0);  
+   }
+
+   // WindowBuffer -- create an WindowBuffer with rows lines, each with cols spaces
+   WindowBuffer (int rows, int cols) {
+      buffer = vector<string> (rows);
+      for(int r = 0; r < rows; r++)
+	 buffer[r] = string(cols, ' ');
+      // sets (r,c) back to (0,0) or initial write point
+      r = 0; c = 0;
+   }
+
+   // moveTo  -- Expands buffer to allow writing at (row,col)
+   void moveTo(int row, int col) {
+     // Set reasonable boundaries
+      if (row <0) row = 0;
+      if (col <0) col = 0;
+      else if (row > 1000 or col > 100)  {
+         // Let's be reasonable; this is only an example after all!
+         row = 1000; col = 100;
+      }
+      r = row; c = col;
+      // Ensure there is a place to move to
+      while(r >=buffer.size())
+         buffer.push_back("");
+      while (c > buffer[r].size())
+         buffer[r] += " ";
+      // Upon exit r will reference an existing row,
+      // c will reference a existing col or will be right after the end
+
+   }
+
+   // insertRow -- inserts str before the current row
+   void insertRow (string str) {
+   buffer.push_back(" ");
+   cout << buffer[5] << endl;
+   cout << buffer[6] << endl;
+   for (int i = buffer.size()-1; i > r; i--)
+	buffer[i] = buffer[i-1];
+   buffer[r] = str;
+   r++;
+   cout << buffer[5] << endl;
+   cout << buffer[6] << endl;
+   }
+
+   // insert -- inserts str at current (r,c) location
+   void insert (string str) {
+   buffer[r].insert(c, str);
+   }
+   // write -- overwrites str at current  (r,c) location
+   void write (string str) {
+      buffer[r].replace(c,str.size(),str);
+      c = c + str.size();
+   } 
+
+   // clear -- remove all lines from the buffer
+   void clear() {
+  	buffer.clear(); 
+   }
+
+   // clearToEoln -- remove all chars from pos (r,c) to end of line
+   void clearToEoln() {
+	for (int i = c; i < buffer[r].size(); i++)
+	    buffer[r].erase(c);
+   }
+
+   // delRow -- delete current row; r then reference next row
+   void delRow() {
+	buffer[r].erase();
+	r++;
+   }
+
+   // delToEoln -- delete from current column to the end of line
+   void delToEoln() {
+	for (int i = c; i < buffer[r].size(); i++) {
+	    buffer[r].erase(i);
+        }
+   }
+
+   // getRow -- get row r
+   string getRow() {
+        return buffer[r];
+   }
+   // numberOfRows -- return the number of rows in the buffer
+   int numberOfRows() { 
+   	return buffer.size(); 	 
+   }
+
+   // numberOfCols -- return the length of the current line
+   int numberOfCols() {  
+   	return buffer[r].size();
+   }
+
+   // rowNumber -- return the row number of the current write position
+   int rowNumber() {  
+	return r;
+   } 
+
+   // colNumber -- return the col number of the current write position
+   int colNumber() {  
+   	return c;
+   }
+};
+ 

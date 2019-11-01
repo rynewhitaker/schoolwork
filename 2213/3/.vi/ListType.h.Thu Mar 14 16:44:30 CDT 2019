@@ -1,0 +1,154 @@
+#ifndef LISTTYPE_H
+#define LISTTYPE_H
+
+#include "NodeType.h"
+#include<iostream>
+#include<cstddef>
+
+template <class T>
+class ListType {
+   public:
+      ListType();
+      ListType(const ListType<T>&);
+      virtual ~ListType();
+      const ListType<T>& operator = (const ListType<T>&);
+      virtual bool insert(const T&) = 0;
+      virtual bool eraseAll();
+      bool erase(const T&);
+      bool empty() const;
+      virtual bool find (const T&) const = 0;
+      size_t size() const;
+      template <class Y>
+      friend std::ostream& operator << (std::ostream&, const  ListType<Y>&);
+   protected:
+      NodeType<T>* head;
+      size_t count;
+   private:
+      void destroy();
+      void copy(const ListType<T>&);
+};
+
+template <class T>
+ListType<T>::ListType() {
+   head = nullptr;
+   count = 0;
+}
+
+template <class T>
+ListType<T>::ListType(const ListType<T>& src) {
+   head = nullptr;
+   copy(src);
+   count = src.count;
+}
+
+template <class T>
+ListType<T>::~ListType() {
+   destroy();
+}
+
+template <class T>
+void ListType<T>::copy(const ListType<T>& src) {
+   NodeType<T> *newNode, *current;
+
+   if (head != nullptr) {
+      destroy();
+   }
+
+   if (src.head == nullptr) {
+      head = nullptr;
+      count = 0;
+   }
+   else {
+      current = src.head;
+      count = src.count;
+      head = new NodeType<T>;
+      head -> info = current -> info;
+      head -> link = nullptr;
+      newNode = head;
+      current = current -> link;
+      while (current != nullptr) {
+         newNode -> link = new NodeType<T>;
+	 newNode = newNode -> link;
+	 newNode -> info = current -> info;
+	 newNode -> link = nullptr;
+	 current = current -> link;
+      }
+   }
+}
+
+template <class T>
+void ListType<T>::eraseAll() {
+   destroy();
+   head = nullptr;
+   count = 0;
+}
+
+template <class T>
+void ListType<T>::erase(const T& item) {
+   NodeType<T> *loc = head, *prev = nullptr;
+   while (loc != nullptr && loc -> info != item) {
+      prev = loc;
+      loc = loc -> link;
+   }
+   if (loc != nullptr && loc -> info == item) {
+      if (prev == nullptr) {
+         head = head -> link;
+	 delete loc;
+      }
+      else {
+         prev -> link = loc -> link;
+	 delete loc;
+      }
+      --count;
+   }
+   return;
+}
+
+template <class T>
+bool ListType<T>::find(const T& item) const {
+}
+
+template <class T>
+size_t ListType<T>::size() const {
+   return count;
+}
+
+template <class T>
+void ListType<T>::destroy() {
+   NodeType<T> *temp;
+   while(head != nullptr) {
+      temp = head;
+      head = head -> link;
+      delete temp;
+   }
+count = 0;
+}
+
+template <class T>
+bool ListType<T>::empty() const {
+   return count == 0;
+}
+
+// From Program02
+template<class Y>
+std::ostream& operator << (std::ostream& out, const ListType<Y>& src) {
+   if (!src.empty()) {
+      out << src.list[0];
+      for (size_t i = 1; i < src.count; ++i) {
+         out << ", " << src.list[i];
+      }
+   }
+   return out;
+}
+
+// From Program02
+template<class Y>
+const ListType<Y>& ListType<Y>::operator=(const ListType<Y>& src){
+   if (this!=&src) {
+      delete [] list;
+      copy(src);
+   }
+   return *this;
+}
+
+#endif

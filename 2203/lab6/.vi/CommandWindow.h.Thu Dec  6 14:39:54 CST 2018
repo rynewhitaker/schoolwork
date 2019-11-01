@@ -1,0 +1,43 @@
+#ifndef COMMAND_WINDOW
+#define COMMAND_WINDOW
+#include "Window.h"
+
+using namespace std;
+class CommandWindow: public Window {
+private: 
+   string label;
+public:
+   using Window::write;
+   CommandWindow():  
+      Window(1,numCols(),numRows()-2,0, "Command: ") 
+   { 
+      label = "Command: ";
+   }
+   CommandWindow(int rows, int cols, int r, int c, string lbl): 
+       Window(rows,cols,r,c ,label) {  label = label; }
+   
+   int readInt() {
+      char line[101];
+      wmove(window,0,9);
+      wgetnstr(window,line,100);  
+      return atoi(line);
+   }
+   double readDouble() {
+      char line[101];
+      wmove(window,0,9);
+      wgetnstr(window,line,100);  
+      return atof(line);
+   }
+   string readString() {
+      char line[101];
+      wmove(window,0,9);
+      wgetnstr(window,line,100);  
+      return string(line);
+   }
+   void clear() {
+      Window::clear();
+      write("");
+      //write(label);
+   }
+};
+#endif

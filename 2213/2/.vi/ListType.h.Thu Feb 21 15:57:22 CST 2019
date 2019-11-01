@@ -1,0 +1,81 @@
+#ifndef LISTTYPE_H
+#define LISTTYPE_H
+
+#include<iostream>
+
+class ListType {
+   public:
+   protected:
+   private:
+
+
+template<class T>
+ListType<T>::ListType(size_t n) {
+};
+
+template<class T>
+ListType<T>::ListType(const ListType<T>& src) {
+   copy(src);
+}
+
+template<class T>
+ListType<T>::~ListType(){
+   delete [] list;
+}
+
+template<class T>
+const ListType<T>& ListType<T>::operator=(const ListType<T>& src){
+   if (this!=&src) {
+      delete [] list;
+      copy(src);
+   }
+   return *this;
+}
+
+template<class T>
+void ListType<T>::eraseAll() {
+   count = 0;
+}
+
+template<class T>
+size_t ListType<T>::size() const {
+   return count;
+}
+
+template<class T>
+bool ListType<T>::empty() const{
+   return count == 0;
+}
+
+template<class T>
+bool ListType<T>::full() const {
+   return count == capacity;
+}
+
+template<class T>
+void ListType<T>::copy(const ListType<T>& src) {
+   capacity = src.capacity;
+   count = src.count;
+   list = new T[capacity];
+   for (size_t i = 0; i < count; ++i) {
+      list[i] = src.list[i];
+   }
+}
+
+template<class U>
+std::ostream& operator << (std::ostream& out, const ListType<U>& src) {
+   if (!src.empty()) {
+      out << src.list[0];
+      for (size_t i = 1; i < src.count; ++i) {
+         out << ", " << src.list[i];
+      }
+   }
+   return out;
+}
+
+
+
+
+
+#endif
+

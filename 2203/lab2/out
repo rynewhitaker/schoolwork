@@ -1,0 +1,8 @@
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+In file included from main.cc:16:0:
+lab2.cc: In member function ‘void WindowBuffer::insertRow(string)’:
+lab2.cc:55:31: error: invalid operands of types ‘<
+        unresolved overloaded function type>’ and ‘int’ to binary ‘
+    operator+’
+buffer.insert(buffer.begin+r, str);
+^

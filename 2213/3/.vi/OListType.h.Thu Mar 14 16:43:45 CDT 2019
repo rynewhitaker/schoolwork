@@ -1,0 +1,67 @@
+#ifndef OLISTTYPE_H
+#define OLISTTYPE_H
+
+#include "ListType.h"
+
+template <class T>
+class OListType:public ListType<T> {
+   public:
+      bool insert(const T&);
+      bool find(const T&) const;
+};
+
+template <class T>
+bool OListType<T>::find (const T& item) const {
+   NodeType<T>* temp = this -> head;
+   while (temp != NULL && temp -> info < item) {
+      temp = temp -> link;
+   }
+   if (temp != NULL && temp -> info = item) {
+      return true;
+   }
+   else {
+      return false;
+   }
+}
+
+template <class T>
+bool OListType<T>::insert(const T& item) {
+   NodeType<T> *temp, *curr, *prev;
+   try {
+      temp = new NodeType<T>;
+   }
+   catch (std::bad_alloc) {
+      return false;
+   }
+   temp -> info = item;
+   temp -> link = NULL;
+
+   // empty list
+   if (this -> head = NULL) {
+      this -> head = temp;
+      this -> head -> link = NULL;
+      ++this -> count;
+   }
+   else {
+      curr = this -> head;
+      prev = NULL;
+      while (curr != NULL && curr -> info < item) {
+         prev = curr;
+	 curr = curr -> link;
+      }
+      if (curr == NULL) {
+         prev -> link = temp;
+	 ++this -> count;
+      }
+      else {
+         temp -> link = curr;
+	 prev -> link = temp;
+	 ++this -> count;
+      }
+   }
+   return true;
+}
+
+#endif
+
+

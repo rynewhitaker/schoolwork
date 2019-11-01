@@ -1,0 +1,178 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Ryne Whitaker
+//  Program 1
+//  Due: 09/04/2019
+//
+//  Description: The cpp file that imports personal.h and deals with entering
+//  non-student (personal) records into the database.  This has all the functions
+//  for reading/writing personal data to/from the database.  This also has the
+//  iostreams for reading in and writing out data to/from the screen.
+//
+//  Input: Personal data is entered into the functions contained in this file
+//  to be entered into the database.
+//
+//  Output: Can output the personal data entered/found in the database but
+//  doesn't necessariy have an output.
+//
+//  Assumptions: None
+//
+//  Special Processing Requirements: Needs to be compiled at the same time as 
+//  student.cpp and database.cpp
+//
+///////////////////////////////////////////////////////////////////////////////
+
+#include "personal.h"
+#include <iostream>
+using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: Personal::Personal() : nameLen(10), cityLen(10)
+//
+//  Description: Default constructor for Personal that sets name and city
+//
+//  Preconditions: None
+//
+//  Postconditions: Name and city have values
+//
+///////////////////////////////////////////////////////////////////////////////
+Personal::Personal() : nameLen(10), cityLen(10){
+  name = new char[nameLen+1];
+  city = new char[cityLen+1];
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: Personal::Personal(char *ssn, char *n, char *c, int y, long s) : nameLen(10), cityLen(10)
+//
+//  Description: Constructor for Personal that takes SSN, name, city, year and salary
+//  and sets their variables to them
+//
+//  Preconditions: SSN, name, city, year, and salary must be passed into the constructor
+//  with their respective types.
+//
+//  Postconditions: The data passed in is stored in their respective variables.
+//
+///////////////////////////////////////////////////////////////////////////////
+Personal::Personal(char *ssn, char *n, char *c, int y, long s) : nameLen(10), cityLen(10) {
+  name = new char[nameLen+1];
+  city = new char[cityLen+1];
+  strcpy(SSN,ssn);
+  strcpy(name,n);
+  strcpy(city,c);
+  year = y;
+  salary = s;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: void Personal::writeToFile(fstream& out) const
+//
+//  Description: Writes all the data the user input into the database specified.
+//
+//  Preconditions: SSN, name, nameLen, city, cityLen, year, and salary must
+//  all have values
+//
+//  Postconditions: SSN, name, nameLen, city, cityLen, year, and salary are 
+//  written into the database
+//
+///////////////////////////////////////////////////////////////////////////////
+void Personal::writeToFile(fstream& out) const {
+  out.write(SSN,9);
+  out.write(name,nameLen);
+  out.write(city,cityLen);
+  out.write(reinterpret_cast<const char*>(&year),sizeof(int));
+  out.write(reinterpret_cast<const char*>(&salary),sizeof(int));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: void Personal::readFromFile(fstream& in)
+//
+//  Description: Reads all the stored data in from the database specified.
+//
+//  Preconditions: SSN, name, nameLen, city, cityLen, year, and salary must
+//  all have values
+//
+//  Postconditions: SSN, name, nameLen, city, cityLen, year, and salary are
+//  read in from the database and stored into their respective variables
+//
+///////////////////////////////////////////////////////////////////////////////
+void Personal::readFromFile(fstream& in) {
+  in.read(SSN,9);
+  in.read(name,nameLen);
+  in.read(city,cityLen);
+  in.read(reinterpret_cast<char*>(&year),sizeof(int));
+  in.read(reinterpret_cast<char*>(&salary),sizeof(int));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: void Personal::readKey()
+//
+//  Description: Reads in the SSN from the user
+//
+//  Preconditions: SSN must exist
+//
+//  Postconditions: a 9 digit value entered by the user is copied into SSN
+//
+///////////////////////////////////////////////////////////////////////////////
+void Personal::readKey() {
+  char s[80];
+  cout << "Enter SSN: ";
+  cin.getline(s,80);
+  strncpy(SSN,s,9);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: ostream& Personal::writeLegibly(ostream& out)
+//
+//  Description: Outputs SSN, name, city, year, and salary to the screen,
+//  labeled with their variable name and delimeted by commas
+//
+//  Preconditions: SSN, name, city, year, and salary must all have values
+//
+//  Postconditions: SSN, name, city, year, and salary are output to the screen
+//
+///////////////////////////////////////////////////////////////////////////////
+ostream& Personal::writeLegibly(ostream& out) {
+  SSN[9] = name[nameLen] = city[cityLen] = '\0';
+  out << "SSN = " << SSN << ", name = " << name << ", city = " << city << ", year = " << year << ", salary = " << salary;
+  return out;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: istream& Personal::readFromConsole(istream& in)
+//
+//  Description: Reads in values for SSN, name, city, year, and salary from
+//  the command line as the user inputs them and stores them in their respective
+//  variables.
+//
+//  Preconditions: SSN, name, nameLen, city, cityLen, year, and salary must exist.
+//
+//  Postconditions: SSN, name, nameLen, city, cityLen, year, and salary all have
+//  values
+//
+///////////////////////////////////////////////////////////////////////////////
+istream& Personal::readFromConsole(istream& in) {
+    SSN[9] = name[nameLen] = city[cityLen] = '\0';
+    char s[80];
+    cout << "SSN: ";
+    in.getline(s, 80);
+    strncpy(SSN, s, 9);
+    cout << "Name: ";
+    in.getline(s, 80);
+    strncpy(name, s, nameLen);
+    cout << "City: ";
+    in.getline(s, 80);
+    strncpy(city, s, cityLen);
+    cout << "Birth year: ";
+    in >> year;
+    cout << "Salary: ";
+    in >> salary;
+    in.ignore();
+    return in;
+}

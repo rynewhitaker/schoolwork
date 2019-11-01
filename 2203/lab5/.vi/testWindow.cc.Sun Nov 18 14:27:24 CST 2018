@@ -1,0 +1,66 @@
+/* 
+   testWindow.cc  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   11/15/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#include <string>
+#include "DebugWindow.h"
+#include "CommandWindow.h"
+
+int main () {
+   initscr();
+   cbreak();
+   
+   DebugWindow d1(10, 20, 0, 0, "Debug 1: ");
+   d1.pause();
+   DebugWindow d2(10, 20, 0, 5, "Debug 2: ");
+   d2.pause();
+   DebugWindow d3(10, 20, 0, 40, "Debug 3: ");
+   d3.pause();
+   d2.hide();
+   d2.pause();
+   DebugWindow d4(10, 20, 0, 60, "Debug 4: ");
+   d4.pause();
+   d2.show();
+   d2.pause();
+   d1.hide();
+   d2.hide();
+   d3.hide();
+   d4.hide();
+   d4.pause();
+
+   CommandWindow c1(10, 20, 0, 0, "Command 1: ");
+   c1.pause();
+   CommandWindow c2(10, 20, 0, 5, "Command 2: ");
+   c2.pause();
+   CommandWindow c3(10, 20, 0, 40, "Command 3: ");
+   c3.pause();
+   c2.hide();
+   c2.pause();
+   CommandWindow c4(10, 20, 0, 60, "Command 4: ");
+   c4.pause();
+   c2.show();
+   c2.pause();
+   c1.hide();
+   c2.hide();
+   c3.hide();
+   c4.hide();
+   c4.pause();
+
+   d1.show();
+   d2.show();
+   d3.show();
+   d4.show();
+   d4.pause();
+   
+   endwin();
+   return 0;
+}
+

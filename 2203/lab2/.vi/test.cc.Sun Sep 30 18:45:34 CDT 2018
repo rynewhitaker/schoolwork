@@ -1,0 +1,29 @@
+/* 
+   test.cc  -- Program to  ... (Fill this in) ...
+
+   Author: Ryne Whitaker
+
+   Modification History
+   Date        Action
+   09/30/18  -- Original version
+
+   ID code: 5Ajt7FvyGJVdw
+*/
+using namespace std;
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <ncurses.h>
+#include <vector>
+
+int main () {
+   vector <int> buffer;
+   for (int i = 0; i < 10; i++)
+	buffer.push_back(i);
+   cout << "buffer contains: ";
+   for (int i = 0; i < buffer.size(); i++)
+	cout << ' ' << buffer[i];
+   cout << endl;
+   return 0;
+}
+

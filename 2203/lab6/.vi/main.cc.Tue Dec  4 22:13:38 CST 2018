@@ -1,0 +1,163 @@
+/*
+   lab5.cc -- Build a window manager
+
+   Author: Larry Morell and Ryne Whitaker
+
+   Modification History
+   7/13/2018  -- Original version
+*/
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <ctype.h> 
+#include <cstring> 
+#include <ncurses.h> 
+#include <time.h>
+#include <stdlib.h>
+#include "BorderedWindow.h"
+#include "DebugWindow.h"
+#include "CommandWindow.h"
+using namespace std;
+
+void process(string player, string computer) {
+   Window pRock(3, 20, 0, 0, "Player: ");
+   pRock.write("Rock");
+   
+   Window pPaper(3, 20, 0, 0, "Player: ");
+   pPaper.write("Paper");
+   
+   Window pScissors(3, 20, 0, 0, "Player: ");
+   pScissors.write("Scissors");
+   
+   Window cRock(3, 20, 0, 20, "Computer: ");
+   cRock.write("Rock");
+   
+   Window cPaper(3, 20, 0, 20, "Computer: ");
+   cPaper.write("Paper");
+   
+   Window cScissors(3, 20, 0, 20, "Computer: ");
+   cScissors.write("Scissors");
+   
+   Window error(3, 100, 2, 0, "");
+   error.write("Please enter a valid selection. Enter \"r\" for rock, \"p\" for paper, \"s\" for scissors, or \"q\" to quit.");
+
+   pRock.hideAll();
+   cRock.hideAll();
+
+   int pWins = 0;  // Counter for player wins
+   int cWins = 0;  // Counter for computer wins
+   int ties = 0;  // Counter for ties
+
+   if (player == "r" && computer == "rock")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pRock.show();
+   cRock.show();
+   cRock.refreshAll();
+   ties++;
+   }
+   else if (player == "r" && computer == "paper")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pRock.show();
+   cPaper.show();
+   cPaper.refreshAll();
+   cWins++;
+   }
+   else if (player == "r" && computer == "scissors")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pRock.show();
+   cScissors.show();
+   cScissors.refreshAll();
+   pWins++;
+   }
+   else if (player == "p" && computer == "rock")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pPaper.show();
+   cRock.show();
+   cRock.refreshAll();
+   pWins++;
+   }
+   else if (player == "p" && computer == "paper")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pPaper.show();
+   cPaper.show();
+   cPaper.refreshAll();
+   ties++;
+   }
+   else if (player == "p" && computer == "scissors")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pPaper.show();
+   cScissors.show();
+   cScissors.refreshAll();
+   cWins++;
+   }
+   else if (player == "s" && computer == "rock")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pScissors.show();
+   cRock.show();
+   cRock.refreshAll();
+   cWins++;
+   }
+   else if (player == "s" && computer == "paper")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pScissors.show();
+   cPaper.show();
+   cPaper.refreshAll();
+   pWins++;
+   }
+   else if (player == "s" && computer == "scissors")
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   pScissors.show();
+   cScissors.show();
+   cScissors.refreshAll();
+   ties++;
+   }
+   else
+   {
+   pRock.hideAll();
+   pRock.refreshAll();
+   error.show();
+   error.refresh();
+   }
+}
+
+int main (int argc, char *argv[]) {
+   initscr();
+   cbreak();      /* Input line buffering disabled; pass on every char*/
+   
+   srand(time(NULL)); // initialize the random seed for computer selection
+   const string plays[3] {"rock", "paper", "scissors"};
+   CommandWindow c1;
+   c1.refresh();
+
+   string player = c1.readString();
+   int outcome = 0; // 0 = player won, 1 = computer won, 2 = player won
+   while (!(player == "q" or player == "Q")) {
+      int randPlay = rand() % 3; // random play selection for computer
+      string computer = plays[randPlay];
+      process(player, computer); 
+      c1.clear();
+      player = c1.readString();   
+   }
+
+   endwin();         /* End curses mode        */
+   return 0;
+}
+

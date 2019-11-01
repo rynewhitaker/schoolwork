@@ -1,0 +1,11 @@
+#ifndef ULISTTYPE_H
+#define ULISTTYPE_H
+
+#include "ListType.h"
+
+template <class T>
+class UListType:public ListType<T> {
+   public:
+      bool insert(const T&);
+      bool find(const T&) const;
+};

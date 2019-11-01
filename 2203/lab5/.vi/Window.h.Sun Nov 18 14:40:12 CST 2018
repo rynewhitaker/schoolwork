@@ -1,0 +1,100 @@
+#ifndef WINDOW_H
+#define WINDOW_H
+// Window.h file -- 
+#include <ncurses.h>
+#include <sstream>
+#include <string>
+#include <vector>
+
+bool dbg = true;
+void debug(string message) {
+   if( dbg ) {
+      WINDOW *debug = newwin(3,COLS,LINES-3,0);
+      box (debug,0,0);
+      wmove(debug,1,1);
+      waddstr (debug, message.c_str());
+      wrefresh(debug);
+      wgetch(debug);
+      delwin(debug);
+   }
+}
+
+int numRows() { int r,c; getmaxyx(stdscr,r,c); return r; }
+int numCols() { int r,c; getmaxyx(stdscr,r,c); return c; }
+
+class Window {
+protected:
+   string contents;
+   WINDOW *window ;
+   static vector <Window *> windowList;
+public:
+   Window (int rows, int cols, int r, int c, string initialContents) {
+      window = newwin(rows, cols, r, c);
+      contents = initialContents;
+      wmove(window, 1, 1);
+      waddstr(window,contents.c_str() );
+      windowList.push_back(this);
+      wrefresh(window);
+   }
+   virtual void write ( string s) {
+      contents += s;
+      //contents = s;
+      wmove(window, 1, 1);
+      wclrtoeol(window);
+      waddstr(window,contents.c_str());
+      wrefresh(window);
+   }
+   virtual void write (double d) {
+      stringstream ss;
+      ss << d;
+      string s = ss.str();
+      write (s);   // call the string version
+   }  
+
+   virtual void write (string s, int n) {
+      write(s);
+      write(":");
+      write(n);
+   }
+   void clear() {
+      wclear(window);
+      contents = "";
+      write("");
+   }
+   void pause() {
+      wgetch(window);
+   }
+
+   virtual void hide() {
+      int i;
+      for (i = 0; i < windowList.size() && windowList[i] != this; i++);
+      if (i < windowList.size()){
+         windowList.erase(windowList.begin() + i);
+         wclear(window);
+	 wrefresh(window);
+      }
+      refreshAll();
+   }
+
+   virtual void show() {
+      windowList.push_back(this);
+      wclear(window);
+      wrefresh(window);
+      refreshAll();
+   }
+
+   virtual void refresh() {
+      wmove(window, 1, 1);
+      waddstr(window, contents.c_str());
+      wrefresh(window);
+   }
+
+   static void refreshAll() {
+      for (auto window:windowList) {
+	      window->refresh();
+      }
+   }
+
+};
+vector <Window *> Window::windowList;
+#endif

@@ -1,0 +1,112 @@
+/*
+mainc.cc  -- Program to test WindowBuffer
+
+Author: Larry Morell
+
+Modification History
+Date        Action
+08/09/18  -- Original version
+
+*/
+using namespace std;
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include "lab2.cc"
+
+void check (string msg, bool cond) {
+   cout << msg << ": ";
+   if (cond) 
+      cout << "ok";
+   else
+      cout << "failed!";
+   cout << endl; 
+}
+
+int main () {
+   // Create window buffers
+   WindowBuffer wb1;
+   WindowBuffer wb2(10, 20); 
+   string msg;
+   msg = "Test 1: After initializing a window buffer the row and col should both be 0";;
+   check(msg, wb1.rowNumber() == 0  && wb1.colNumber() == 0); 
+   check(msg, wb2.rowNumber() == 0  && wb2.colNumber() == 0); 
+
+   msg = "Test 1a: After initializing an empty window buffer number of rows = 1, number of cols =0";;
+   check(msg, wb1.numberOfRows() == 1  && wb1.colNumber() == 0); 
+
+   msg = "Test 2: After moveto (5,7) the row = 5 and col = 7";;
+   wb1.moveTo(5,7);
+   wb2.moveTo(5,7);
+   check(msg, wb1.rowNumber() == 5  && wb1.colNumber() == 7); 
+   check(msg, wb2.rowNumber() == 5  && wb2.colNumber() == 7); 
+
+   // You need to test the other operations in a similar fashion
+   // ...
+
+   msg = "Test 3: After writing a string of length 5 at (3,7), row = 3, col = 12";
+   wb1.moveTo(3,7); wb1.write("doggy");
+   wb2.moveTo(3,7); wb2.write("puppy");
+   check (msg, wb1.rowNumber() == 3  && wb1.colNumber() == 12); 
+   check (msg, wb2.rowNumber() == 3  && wb1.colNumber() == 12); 
+
+   msg = "Test 4: After inserting a string of length 5 at (3,7), row = 3, col = 12";
+   check (msg, wb1.rowNumber() == 3  && wb1.colNumber() == 12); 
+   check (msg, wb2.rowNumber() == 3  && wb1.colNumber() == 12); 
+
+   msg = "Test 5a: Row 3 in wb1 should contain \"       doggy\"";
+   check(msg, wb1.getRow() == "       doggy"); 
+ 
+   msg = "Test 5b: Row 3 in wb2 should contain \"       puppy        \"";
+   check(msg, wb2.getRow() == "       puppy        ");  
+
+/*
+   wb1.moveTo(4,7); wb1.insert("apple");
+   wb2.moveTo(4,7); wb2.insert("manzana");
+   cout << wb2.getRow() << endl;
+   cout << wb2.numberOfCols() << endl;
+*/
+
+
+   msg = "Test 7a: after deleting \"gy\" from row 3 of wb1, it should contain \"       dog\"";
+   wb1.moveTo(3,10);
+   wb1.delToEoln();
+   check(msg, wb1.getRow() == "       dog");
+
+   msg = "Test 7b: after deleting \"py\" and spaces after \"puppy\" in row 3 of wb2, it should contain \"       pup\"";
+   wb2.moveTo(3,10);
+   wb2.delToEoln();
+   check(msg, wb2.getRow() == "       pup");
+   
+   msg = "Test 8a: After deleting row 3, the row should be empty and r should reference row 4";
+   wb1.moveTo(3,0);
+   wb1.delRow();
+   check(msg, wb1.rowNumber() == 4 && wb1.buffer[3] == "");
+
+   msg = "Test 8b: After deleting row 3, the row should be empty and r should reference row 4";
+   wb2.moveTo(3,0);
+   wb2.delRow();
+   check(msg, wb2.rowNumber() == 4 && wb2.buffer[3] == "");
+
+   msg = "Test 10: After clearing the entire buffer, numberOfRows and numberOfCols should both == 0";
+   wb1.clear();
+   check(msg, wb1.numberOfRows() == 0 && wb1.numberOfCols() == 0);
+
+/*
+   msg = "Test 5: After inserting \"abcde\" at (4,9), row should be \"         abcde\"";
+   wb1.moveTo(4,9);
+   wb1.insert("abcde");
+   check (msg, wb1.getRow() == "         abcde");
+*/
+   // You should include additional tests to check other operations.
+   // You know your instructor will!
+/*
+   msg = "Test 6: After inserting string \"insertRow\" before current row r, row 4 = \"insertRow\" and row 5 = \"         abcde\"";
+   wb1.insertRow("insertRow");
+   check (msg, wb1.getRow() == "insertRow");
+*/
+
+   return 0;
+
+}

@@ -1,0 +1,9 @@
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+stars.cpp: In function ‘void print(int, int)’:
+stars.cpp:22:13: error: too few arguments to function ‘void print(int,
+        int)’
+print(b-1);
+^
+stars.cpp:16:6: declared here
+void print(int b, int og) {
+        ^~~~~

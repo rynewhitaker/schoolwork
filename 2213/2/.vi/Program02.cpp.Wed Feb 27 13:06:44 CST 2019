@@ -1,0 +1,73 @@
+#include "UListType.h"
+#include "OListType.h"
+#include<iostream>
+
+using namespace std;
+
+int main() {
+   OListType<int> olist;
+   UListType<int> ulist;
+
+   for (int i = 22; i >= 1; i = i - 10) {
+      if (olist.insert(i)) {
+         cout << "insert of " << i << " in ordered list succeeded" << endl;
+      }
+      else {
+         cout << "insert of " << i << " in ordered list failed" << endl;
+      }
+   }
+   cout << olist << endl;
+   olist.insert(115);
+   cout << olist << endl;
+      
+   for (int i = 1; i <= 11; i = i + 10) {
+      if (ulist.insert(i)) {
+         cout << "insert of " << i << " in unordered list succeeded" << endl;
+      }
+      else {
+         cout << "insert of " << i << " in unordered failed" << endl;
+      }
+   }
+
+   cout << ulist << endl;
+   ulist.insert(115);
+   cout << ulist << endl;
+   
+   for (size_t items = 1; items <= 11; ++items) {
+      if (olist.find(items)) {
+         cout << items << " is in the ordered list." << endl;
+      }
+      else {
+         cout << items << " is not in the ordered list." << endl;
+      }
+   }
+
+   cout << olist << endl;
+
+   if (olist.find(0)) {
+      cout << "0 is in the ordered list." << endl;
+   }
+   
+   return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

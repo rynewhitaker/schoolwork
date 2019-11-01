@@ -1,0 +1,77 @@
+#ifndef DEBUG_WINDOW
+#define DEBUG_WINDOW
+#include <sstream>
+#include <ncurses.h>
+class DebugWindow {
+private:
+   WINDOW *debug;
+   int pos;
+   string contents;
+   bool dodebug;
+
+public:
+   // Create a window a the bottom of the screen
+   DebugWindow() {
+      int r,c;
+      // Set up debug window at the bottom of the screen
+      dodebug = true;
+      getmaxyx(stdscr,r,c);
+      debug = newwin(1,c,r-1,0);
+      contents = "Debug: ";
+      waddstr(debug,contents.c_str() );
+      wrefresh(debug);
+   }
+
+   // off -- Turn debugging off
+   void off() { dodebug = false;}
+
+   // off -- turn debugging on
+   void on() { dodebug = true;}
+
+   // write -- Append string s to the debug window
+   void write ( string s) {
+      if (dodebug) {   // ignore if debug is off
+      contents += s;
+      wmove(debug, 0, 0);
+      wclrtoeol(debug);
+      waddstr(debug,contents.c_str());
+      wrefresh(debug);
+      }
+   }
+
+   // write -- Append character ch to the debug window
+   void write (char ch) {
+      if (! dodebug) return;   // ignore if debug is off
+      write ( string("")+ch);   // call the string version
+   }  
+
+   // write -- Write integer n to the debug window
+   void write (int n) {
+      if (! dodebug) return;   // ignore if debug is off
+      stringstream ss;
+      ss << n;
+      string s = ss.str();
+      write (s);   // call the string version
+   }  
+
+   // write -- Write s: n to the debug window
+   void write (string s, int n) {
+      if (! dodebug) return;   // ignore if debug is off
+      write(s);
+      write(":");
+      write(n);
+   }
+
+   // clear -- Clear the debug window and redisplay the prompt
+   void clear() {
+      wclear(debug);
+      contents = "Debug: ";
+      write("");
+   }
+
+   // pause -- Wait for the user to type a character in the debug window 
+   void pause() {
+      wgetch(debug);
+   }
+};
+#endif

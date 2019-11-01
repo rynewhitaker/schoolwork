@@ -1,0 +1,212 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Ryne Whitaker
+//  Program 1
+//  Due: 09/04/2019
+//
+//  Description: The cpp file that brings all the other files together to make
+//  a functioning database interface.  This writes and reads to/from the database
+//  and accepts input that is used to determine what the program will do.  Also
+//  handles finding and modifying data in a database.
+//
+//  Input:  The user inputs what mode they would like to use (Modify, Add, etc)
+//  and the other input is from a database that should be created beforehand
+//  by the user.
+//
+//  Output: Writes to the database file if something is added or modified
+//  and outputs prompts to the screen to tell the user what to do.
+//
+//  Assumptions: None
+//
+//  Special Processing Requirements: Needs to be compiled at the same time as 
+//  student.cpp and personal.cpp
+//
+///////////////////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include "student.h"
+#include "personal.h"
+#include "database.h"
+using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: Database<T>::Database() {}
+//
+//  Description: Creates an instance of Database
+//
+//  Preconditions: None
+//
+//  Postconditions: An instance of Database exists
+//
+///////////////////////////////////////////////////////////////////////////////
+template <class T>
+Database<T>::Database() {}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: void Database<T>::add(T& d)
+//
+//  Description: Writes new data to a specified database
+//
+//  Preconditions: A database must exist
+//
+//  Postconditions: The database now contains the new data
+//
+///////////////////////////////////////////////////////////////////////////////
+template <class T>
+void Database<T>::add(T& d)
+{
+    database.open(fName, ios::in | ios::out | ios::binary);
+    database.seekp(6, ios::end);
+    d.writeToFile(database);
+    database.close();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: void Database<T>::modify(const T& d)
+//
+//  Description: Modifies a database entry
+//
+//  Preconditions: A database must exist
+//
+//  Postconditions: The specified entry d is overwritten by the data in tmp
+//
+///////////////////////////////////////////////////////////////////////////////
+template <class T>
+void Database<T>::modify(const T& d)
+{
+    T tmp;
+    database.open(fName, ios::in | ios::out | ios::binary);
+    while (!database.eof()) {
+        tmp.readFromFile(database);
+        if (tmp == d) {
+            cin >> tmp;
+            database.seekp(-d.size(), ios::cur);
+            tmp.writeToFile(database);
+            database.close();
+            return;
+        }
+    }
+    database.close();
+    cout << "The record to be modified is not in the database\n";
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: bool Database<T>::find(const T& d)
+//
+//  Description: Used for determining whether or not something d is in the database.
+//
+//  Preconditions: A database must exist and data must be entered for d
+//
+//  Postconditions: Returns true if d was found in database and false otherwise
+//
+///////////////////////////////////////////////////////////////////////////////
+template <class T>
+bool Database<T>::find(const T& d) {
+    T tmp;
+    database.open(fName, ios::in | ios::binary);
+    while (!database.eof()) {
+        tmp.readFromFile(database);
+        if (tmp == d) {
+            database.close();
+            return true;
+        }
+    }
+    database.close();
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: ostream& Database<T>::print(ostream& out)
+//
+//  Description: Outputs the data read from the database file using the format
+//  defined in personal/student.cpp (delimeted by commas and labels)
+//
+//  Preconditions: Data must exist in the database file.
+//
+//  Postconditions: The data from the database file is output to the console 
+//  neatly formatted with labels and commas
+//
+///////////////////////////////////////////////////////////////////////////////
+template <class T>
+ostream& Database<T>::print(ostream& out) {
+    T tmp;
+    database.open(fName, ios::in | ios::binary);
+    while (true) {
+        tmp.readFromFile(database);
+        if (database.eof())
+            break;
+        out << tmp << endl;
+    }
+    database.close();
+    return out;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: void Database<T>::run()
+//
+//  Description: The main menu for the program that has the user enter the
+//  database file name, an option for modifying/adding/finding a record in the
+//  database.
+//
+//  Preconditions: A database file must exist
+//
+//  Postconditions: The operation corresponding to the number the user inputs
+//  will be run, and the program can be exit by entering the number 4.
+//
+///////////////////////////////////////////////////////////////////////////////
+template <class T>
+void Database<T>::run() {
+    cout << "File name: ";
+    cin >> fName;
+    char option[5];
+    T rec;
+    cout << "1. Add 2. Find 3. Modify a record 4. Exit\n";
+    cout << "Enter an option: ";
+    cin.getline(option, 4);
+    while (cin.getline(option, 4)) {
+        if (*option == '1') {
+            cin >> rec;
+            add(rec);
+        }
+        else if(*option == '2') {
+            rec.readKey();
+            cout << "The record is ";
+            if (find(rec) == false)
+                cout << "not ";
+            cout << "in the database\n";
+        }
+        else if(*option == '3') {
+            rec.readKey();
+            modify(rec);
+        }
+        else if(*option != '4')
+			cout << "Wrong option\n";
+        else return;
+        cout << *this;
+        cout << "Enter an option: ";
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Function: int main()
+//
+//  Description: The main function
+//
+//  Preconditions: None
+//
+//  Postconditions: Runs The Personal database system if Personal is uncommented
+//  and runs the Student database system if Student is uncommented
+//
+///////////////////////////////////////////////////////////////////////////////
+int main() {
+        Database<Personal>().run(); 
+	// Database<Student>().run();
+	return 0;
+}

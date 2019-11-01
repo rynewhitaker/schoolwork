@@ -1,0 +1,88 @@
+#ifndef COMMAND_WINDOW
+#define COMMAND_WINDOW
+#include <ncurses.h>
+#include <sstream>
+#include <string>
+using namespace std;
+class CommandWindow {
+private:
+   WINDOW *command;
+   string contents;
+
+public:
+   // Create a command window in the next-to-last row from the bottom of the screen
+   CommandWindow() {
+      int r,c;
+      // Set up command window next to bottom line of the screen
+      getmaxyx(stdscr,r,c);
+      command = newwin(1,c,r-2,0);
+      contents = "Command: ";
+      waddstr(command,contents.c_str() );
+      wrefresh(command);
+   }
+
+   // write -- Append a stringin s to the command window
+   void write ( string s) {
+      contents += s;
+      wmove(command, 0, 0);
+      wclrtoeol(command);
+      waddstr(command,contents.c_str());
+      wrefresh(command);
+   }
+
+   // write -- Append character ch to the command window
+   void write (char ch) {
+      write ( string("")+ch);   // call the string version
+   }  
+
+   // write -- Write integer n to the command window
+   void write (int n) {
+      stringstream ss;
+      ss << n;
+      string s = ss.str();
+      write (s);   // call the string version
+   }  
+
+   // write -- Write s: n to the command window
+   void write (string s, int n) {
+      write(s);
+      write(":");
+      write(n);
+   }
+
+   // clear -- Clear the command window and redisplay the prompt
+   void clear() {
+      contents = "Command: ";
+      write("");
+   }
+
+   // pause -- Wait for the user to type a character in the command window 
+   void pause() {
+      wgetch(command);
+   }
+
+   // readInt -- Read an integer from the command window
+   int readInt() {
+      char line[101];
+      wmove(command,0,9);
+      wgetnstr(command,line,100);  
+      return atoi(line);
+   }
+
+   // readInt -- Read a double from the command window
+   double readDouble() {
+      char line[101];
+      wmove(command,0,9);
+      wgetnstr(command,line,100);  
+      return atof(line);
+   }
+
+   // readInt -- Read a string from the command window (up to 100 chars)
+   string readString() {
+      char line[101];
+      wmove(command,0,9);
+      wgetnstr(command,line,100);  
+      return string(line);
+   }
+};
+#endif

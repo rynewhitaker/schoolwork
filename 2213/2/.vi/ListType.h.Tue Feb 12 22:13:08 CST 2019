@@ -1,0 +1,36 @@
+#ifndef LISTTYPE_H
+#define LISTTYPE_H
+
+#include<string>
+
+virtual bool insert(const T&) {
+}
+
+virtual void eraseAll() {
+}
+
+virtual bool erase(const T&) {
+}
+
+virtual bool find(const T&) {
+}
+
+const size_t size() {
+}
+
+const bool empty() {
+}
+
+const bool full() {
+}
+
+
+
+
+
+
+
+
+
+#endif
+

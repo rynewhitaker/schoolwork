@@ -1,0 +1,136 @@
+#ifndef QUEUE__H
+#define QUEUE__H
+
+#include "QNodeType.h"
+#include <cstdlib>
+
+template <class T>
+class queue {
+   public:
+      queue();
+      queue(const queue<T>&);
+      virtual ~queue();
+      const queue<T>& operator=(const queue<T>&);
+      void push(const T&);
+      void pop();
+      const T& front() const;
+      const T& back() const;
+      size_t size() const;
+      bool empty() const;
+   private:
+      QNodeType<T> *front_, *back_;
+      size_t count;
+      void destroy();
+      void copy(const queue<T>&);
+};
+
+template<class T>
+queue<T>::queue() {
+   front_ = back_ = nullptr;
+   count = 0;
+}
+
+template <class T>
+const T& queue<T>::front() const {
+   if (!empty()) {
+      return front_ -> item;
+   }
+}
+
+template <class T>
+const T& queue<T>::back() const {
+   if (!empty()) {
+      return back_ -> item;
+   }
+}
+
+template <class T>
+size_t queue<T>::size() const {
+   return count;
+}
+
+template <class T>
+queue<T>::~queue() {
+   destroy();
+}
+
+template <class T>
+queue<T>::queue(const queue<T>& source) {
+   copy(source);
+   count = source.count;
+}
+
+template <class T>
+const queue<T>& queue<T>::operator=(const queue<T>& source) {
+   if (this != &source) {
+      destroy();
+      copy(source);
+   }
+   return *this;
+}
+
+template <class T>
+void queue<T>::push(const T& item) {
+   if (front_ == nullptr) {
+      front_ = new QNodeType<T>;
+      front_ -> item = item;
+      front_ -> next = nullptr;
+      back_ = front_;
+   }
+   else {
+      back_ -> next = new QNodeType<T>;
+      back_ = back_ -> next;
+      back_ -> item = item;
+   }
+   ++count;
+}
+
+template <class T>
+void queue<T>::pop() {
+   if (!empty()) {
+      QNodeType<T>* temp = front_;
+      front_ = front_ -> next;
+      delete temp;
+      if (front_ == nullptr) {
+         back_ = nullptr;
+      }
+      --count;
+   }
+}
+
+template <class T>
+bool queue<T>::empty() const {
+   return (front_ == nullptr);
+}
+
+template <class T>
+void queue<T>::destroy() {
+   while(!empty()) {
+      pop();
+   }
+}
+
+template <class T>
+void queue<T>::copy(const queue<T>& source) {
+   QNodeType<T>* temp = source.front_;
+   front_ = back_ = nullptr;
+   if (temp != nullptr) {
+      front_ = new QNodeType<T>;
+      front_ -> item = temp -> item;
+      front_ -> next = nullptr;
+      back_ = front_;
+      temp = temp -> next;
+      while (temp != nullptr) {
+         back_ -> next = new QNodeType<T>;
+         back_ = back_ -> next;
+         back_ -> item = temp -> item;
+         temp = temp -> next;
+      }
+      back_ -> next = nullptr;
+   }
+   else {
+      front_ = back_ = nullptr;
+   }
+   count = source.count;
+}
+#endif

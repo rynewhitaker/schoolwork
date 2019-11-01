@@ -1,0 +1,19 @@
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+In file included from lab3.cc:13:
+DebugWindow.h:14:23: error: expected ‘;’ before ‘(
+        ’ token
+using Window::write();
+^
+;
+DebugWindow.h:14:24: error: expected unqualified-id before ‘)’ token
+using Window::write();
+^
+In file included from lab3.cc:14:
+CommandWindow.h:14:23: error: expected ‘;’ before ‘(
+        ’ token
+using Window::write();
+^
+;
+CommandWindow.h:14:24: error: expected unqualified-id before ‘)’ token
+using Window::write();
+^

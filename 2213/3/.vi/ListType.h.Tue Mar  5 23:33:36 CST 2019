@@ -1,0 +1,22 @@
+#ifndef LISTTYPE_H
+#define LISTTYPE_H
+
+template <class T>
+ListType<T>::ListType() {
+   head = nullptr;
+   count = 0;
+}
+
+template <class T>
+ListType<T>::ListType(const ListType<T>& src) {
+   head = nullptr;
+   copy(src);
+   count = src.count;
+}
+
+template <class T>
+ListType<T>::~ListType() {
+   destroy();
+}
+
+#endif

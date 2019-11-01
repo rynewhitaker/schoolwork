@@ -1,0 +1,86 @@
+#ifndef OLISTTYPE_H
+#define OLISTTYPE_H
+#include "ListType.h"
+#include<iostream>
+
+template <class T> //
+class OListType: public ListType<T> {
+   public:
+      OListType(size_t = 10);
+      virtual bool insert (const T&);
+      virtual bool erase (const T&);
+      virtual bool find (const T&) const;
+};
+
+template <class T>
+bool OListType<T>::insert(const T& item) {
+   bool result = false;
+   bool goodtogo = true;
+
+   if (this -> full()) {
+      try {
+         T *temp = new T[2*this -> capacity];
+	 this -> capacity = 2*this -> capacity;
+	 for (size_t i = 0; i < this -> count; ++i) {
+            temp[i] = this -> list[i];
+	 }
+	 delete[] this -> list;
+	 this -> list = temp;
+      }
+      catch(std::bad_alloc) {
+         goodtogo = false;
+      }
+   }
+   if (goodtogo) {
+      size_t j = this -> count;
+      while((j > 0) && (item < this -> list[j-1])) {
+         this -> list[j] = this -> list[j-1];
+	 --j;
+      }
+      this -> list[j] = item;
+      ++this -> count;
+      result = true;
+   }
+
+   return result;
+}
+
+template <class T>
+bool OListType<T>::erase(const T& item) {
+   bool result = false;
+
+   if (!this -> empty()) {
+      size_t i = 0;
+      while (i < this -> count && item != this -> list[i]) {
+         ++i;
+      }
+   if (i < this -> count) {
+      while (i < this -> count-1) {
+         this -> list[i] = this -> list[i+1];
+         ++i;
+      }
+      --this -> count;
+      //this -> list[i] = this -> list[--this->count];
+      result = true;
+      }
+   }
+   return result;
+}
+
+template <class T>
+bool OListType<T>::find(const T& item) const {
+   int i = 0, j = this -> count-1, mid;
+   bool found = false;
+   while ((i <= j) && !found) {
+      mid = ((i + j)/2);
+      if (item == this -> list[mid]) {
+         found = true;
+      } else {
+         if (item < this -> list[mid]) j = mid-1;
+	 else (i = mid+1);
+      }
+   }
+   return found;
+}
+
+#endif
